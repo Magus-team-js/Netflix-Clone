@@ -8,7 +8,9 @@ export default function MovieList(props) {
         props.movies.map((movie) => {
           return (
             <>
-              <Movie movie={movie} />
+              <div>
+                <Movie movie={movie} />
+              </div>
             </>
           )
         })

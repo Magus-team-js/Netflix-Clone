@@ -16,9 +16,11 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      {
-        (movies.length > 0) && <MovieList movies={movies} />
-      }
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(18rem, 1fr))', backgroundColor: '#413F42' }}>
+        {
+          (movies.length > 0) && <MovieList movies={movies} />
+        }
+      </div>
     </>
   )
 }
