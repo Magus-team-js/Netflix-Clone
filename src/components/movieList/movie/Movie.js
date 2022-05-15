@@ -5,12 +5,12 @@ import ModalMovie from '../../modalMovie/ModalMovie'
 
 export default function Movie(props) {
   const [show, setShow] = useState(false);
-  const [chosenMovie, setChosenMovie] = useState({});
+  const [chosenMovie, setChosenMovie] = useState();
 
   const handleClose = () => setShow(false);
-  const handleShow = () => {
-    setChosenMovie(props.movie);
-    console.log(props.movie);
+  const handleShow = (movie) => {
+    setChosenMovie(movie);
+    // console.log(props.movie);
     setShow(true);
   }
   // console.log(props.movie.poster_path);
@@ -26,11 +26,11 @@ export default function Movie(props) {
           <Card.Text>
             {props.movie.release_date || 'There is no release date'}
           </Card.Text>
-          <Button variant="danger" onClick={handleShow}>Add To Favorite</Button>
+          <Button variant="danger" onClick={() => handleShow(props.movie)}>Add To Favorite</Button>
         </Card.Body>
       </Card>
       {
-        chosenMovie && <ModalMovie show={show} handleClose={handleClose} chosenMovie={chosenMovie} />
+        chosenMovie && <ModalMovie show={show} handleClose={handleClose} chosenMovie={chosenMovie} updateMovie={props.updateMovie} />
       }
     </>
   )
