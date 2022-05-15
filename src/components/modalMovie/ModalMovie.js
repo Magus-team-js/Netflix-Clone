@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 // import ModalDialog from 'react-bootstrap/ModalDialog'
@@ -8,7 +8,41 @@ import Form from 'react-bootstrap/Form'
 
 
 export default function ModalMovie(props) {
-  // console.log(props);
+
+  let commentRef = useRef();
+
+  function handleComment(e) {
+    e.preventDefault();
+    let userComment = commentRef.current.value;
+    console.log({ userComment });
+    let newMovie = { ...props.chosenMovie, userComment };
+    props.updateMovie(newMovie, props.chosenMovie.id);
+  }
+
+  async function handleAddFav(e, movie) {
+    e.preventDefault();
+    let url = `https://movies-bahaa.herokuapp.com/addMovie`;
+    let data = {
+      name: movie.title,
+      time: movie.release_date,
+      summary: movie.overview,
+      image: movie.poster_path,
+      comment: movie.comment
+    }
+
+    let response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data),
+      mode: 'cors',
+    })
+
+    let addedMovie = await response.json();
+    console.log({ addedMovie });
+  }
+
   return (
     <>
       <Modal show={props.show} onHide={props.handleClose}>
@@ -17,21 +51,25 @@ export default function ModalMovie(props) {
         </Modal.Header>
         <Modal.Body style={{ backgroundColor: '#7F8487' }}>
           <img src={`https://image.tmdb.org/t/p/w400/${props.chosenMovie.poster_path}`} alt="Movie poster" />
+          <br />
+          {props.chosenMovie.comment ? props.chosenMovie.comment : 'No Comment'}
           <Form>
             <Form.Group
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
             >
-              <Form.Label>Add Comment</Form.Label>
-              <Form.Control as="textarea" rows={3} />
+              <Form.Control ref={commentRef} as="textarea" rows={3} placeholder="Entre your comment" />
             </Form.Group>
+            <Button variant="primary" type="submit" onClick={(e) => handleComment(e)}>
+              Submit Comment
+            </Button>
           </Form>
         </Modal.Body>
         <Modal.Footer style={{ backgroundColor: '#7F8487' }}>
           <Button variant="secondary" onClick={props.handleClose}>
             Close
           </Button>
-          <Button variant="danger" onClick={props.handleClose}>
+          <Button variant="danger" type="submit" onClick={(e) => handleAddFav(e, props.chosenMovie)}>
             Add To Favorite
           </Button>
         </Modal.Footer>
