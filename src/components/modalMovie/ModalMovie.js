@@ -69,7 +69,7 @@ export default function ModalMovie(props) {
           <Button variant="secondary" onClick={props.handleClose}>
             Close
           </Button>
-          <Button variant="danger" type="submit" onClick={(e) => handleAddFav(e, props.chosenMovie)}>
+          <Button variant="danger" type="submit" data-dismiss="modal" onClick={(e) => handleAddFav(e, props.chosenMovie)} >
             Add To Favorite
           </Button>
         </Modal.Footer>
